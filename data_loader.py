@@ -1,5 +1,5 @@
 import numpy as np
-
+from error_propagation import *
 
 from fitting_and_analysis import CurveFitFuncs
 cff = CurveFitFuncs()
@@ -33,10 +33,25 @@ class DataLoader():
         delta_r_arr = np.array(delta_r_arr)
         delta_g_arr = np.array(delta_g_arr)
         delta_g_error_arr = np.array(delta_g_error_arr)
-                
-        self.y = delta_g_arr
-        self.y_error = delta_g_error_arr
+
+        delta_rs = np.array(np.sort(list(set(delta_r_arr))))
+        delta_r_errors = np.zeros_like(delta_rs) + 0
+
+        delta_g_averages = []
+        delta_g_average_errors = []
+
+        for dr in delta_rs:
+            delta_g_averages.append(np.average(delta_g_arr[delta_r_arr == dr]))
+            delta_g_average_errors.append(average_error(delta_g_error_arr[delta_r_arr == dr]))
+
+        delta_g_averages = np.array(delta_g_averages)
+        delta_g_average_errors = np.array(delta_g_average_errors)
+
+        self.y = delta_g_averages
+        self.y_error = delta_g_average_errors
         
-        self.x = delta_r_arr
-        self.x_error = np.zeros_like(delta_r_arr) 
+        self.x = delta_rs
+        self.x_error = delta_r_errors
+
+        print(len(self.y), len(self.x))
 

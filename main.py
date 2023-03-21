@@ -26,5 +26,8 @@ fit.scatter_plot_data_and_fit(ax)
 
 fit.plot_residuals(residuals_ax)
 
+fig.savefig('plots/fit_plot.png')
+residuals_fig.savefig('plots/residuals_plot.png')
+
 fig.show()
 residuals_fig.show()
