@@ -6,8 +6,15 @@ cff = CurveFitFuncs()
 
 class DataLoader():
     def __init__(self, filename):
+
+        floor_to_r_factor = 3.95
+        mgal_to_g_factor = 1 / 980665
+
+        min_range = 0
+        max_range = -1
+
         directory = '%s.txt' % (filename)
-        self.full_data = np.loadtxt(directory, delimiter=',', dtype=float).T
+        self.full_data = np.loadtxt(directory, delimiter=',', dtype=float)[min_range:max_range].T
 
         floors = self.full_data[0]
         left_edge = self.full_data[1]
@@ -47,11 +54,9 @@ class DataLoader():
         delta_g_averages = np.array(delta_g_averages)
         delta_g_average_errors = np.array(delta_g_average_errors)
 
-        self.y = delta_g_averages
-        self.y_error = delta_g_average_errors
+        self.y = delta_g_averages * mgal_to_g_factor
+        self.y_error = delta_g_average_errors * mgal_to_g_factor
         
-        self.x = delta_rs
-        self.x_error = delta_r_errors
-
-        print(len(self.y), len(self.x))
+        self.x = delta_rs * floor_to_r_factor
+        self.x_error = delta_r_errors * floor_to_r_factor
 
