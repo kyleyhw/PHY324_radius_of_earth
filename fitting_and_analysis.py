@@ -58,7 +58,6 @@ class Output():
         ax.errorbar(x, y, yerr=yerr, xerr=xerr, linestyle='None', capsize=2, marker='.', **kwargs)
 
     def get_dp(self, num): # returns number of decimal places
-        num = abs(float(num))
         decimal = Decimal(str(num))
         if decimal.as_tuple().exponent >= 0:
             dp = -int(np.log10(float(num)))
@@ -96,11 +95,17 @@ class Output():
     def print_with_uncertainty(self, num, uncertainty):
         rounded_uncertainty = self.to_sf(uncertainty, sf=1)
         uncertainty_dp = self.get_dp(rounded_uncertainty)
+
+        print(uncertainty_dp, 'uncertainty dp')
+
         rounded_num = round(num, uncertainty_dp)
         rounded_num_dp = self.get_dp(rounded_num)
+
         rounded_num_leading_dp = self.get_leading_dp(rounded_num)
 
-        num_significant = float(rounded_num) * 10 ** rounded_num_leading_dp
+        print(rounded_num, 'rounded num')
+
+        num_significant = Decimal(rounded_num) * 10 ** Decimal(rounded_num_leading_dp)
         uncertainty_significant = Decimal(rounded_uncertainty) * 10 ** Decimal(rounded_num_leading_dp)
 
         if uncertainty_dp <= 0:
@@ -119,10 +124,7 @@ class Output():
 
 
         string = '$' + rounded_num + ' \pm ' + rounded_uncertainty + '$' # old version
-        if rounded_num_leading_dp < -4 or rounded_num_leading_dp > 4:
-            string = r'$( %s \pm %s ) \times 10^{%s}$' %(num_significant, uncertainty_significant, -rounded_num_leading_dp)
-        else:
-            string = r'$( %s \pm %s )$' % (num_significant, uncertainty_significant)
+        string = r'$( %s \pm %s ) \times 10^{%s}$' %(num_significant, uncertainty_significant, -rounded_num_leading_dp)
         return string
 
 
