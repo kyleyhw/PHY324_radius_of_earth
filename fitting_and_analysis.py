@@ -120,7 +120,7 @@ class Output():
 
 
         string = '$' + rounded_num + ' \pm ' + rounded_uncertainty + '$' # old version
-        string = r'$( %s \pm %s ) \times 10^{%s}$' %(num_significant, uncertainty_significant, -rounded_num_leading_dp)
+        string = r'$(%s \pm %s) \times 10^{%s}$' %(num_significant, uncertainty_significant, -rounded_num_leading_dp)
         return string
 
 
