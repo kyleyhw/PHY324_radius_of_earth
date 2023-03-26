@@ -54,8 +54,6 @@ residuals_fig.savefig('plots/residuals_plot.png')
 slope = fit.popt[0]
 slope_error = fit.parameter_errors[0]
 
-print(slope, slope_error)
-
 def R_from_slope(slope):
         result = -2 * g / slope
         return result
@@ -66,8 +64,6 @@ def R_from_slope_error(slope, slope_error):
 
 R_best_guess = R_from_slope(slope)
 R_error = R_from_slope_error(slope, slope_error)
-
-print(R_best_guess, R_error)
 
 print('measured radius is ' + Output.print_with_uncertainty(R_best_guess, R_error))
 print(R_best_guess / known_radius, 'of the known value')

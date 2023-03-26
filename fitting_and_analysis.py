@@ -96,14 +96,10 @@ class Output():
         rounded_uncertainty = self.to_sf(uncertainty, sf=1)
         uncertainty_dp = self.get_dp(rounded_uncertainty)
 
-        print(uncertainty_dp, 'uncertainty dp')
-
         rounded_num = round(num, uncertainty_dp)
         rounded_num_dp = self.get_dp(rounded_num)
 
         rounded_num_leading_dp = self.get_leading_dp(rounded_num)
-
-        print(rounded_num, 'rounded num')
 
         num_significant = Decimal(rounded_num) * 10 ** Decimal(rounded_num_leading_dp)
         uncertainty_significant = Decimal(rounded_uncertainty) * 10 ** Decimal(rounded_num_leading_dp)
