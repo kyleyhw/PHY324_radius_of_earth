@@ -13,13 +13,15 @@ import data_loader
 import fit_models
 
 g = 9.804253 # m s^-2
-known_radius = 6378100
+known_radius = 6378100 # m
 theoretical_slope = -2 * g / known_radius
 
 data = data_loader.DataLoader('RadiusEarthData')
 model = fit_models.Proportional()
 
-fit = fitting.Fitting(model, data.x, data.y, data.y_error)
+units_for_parameters = (r's$^{-2}$')
+
+fit = fitting.Fitting(model, data.x, data.y, data.y_error, units_for_parameters=units_for_parameters)
 
 
 fig, ax = plt.subplots(1, 1, figsize=(16,9))
@@ -33,6 +35,13 @@ ax.plot(x_for_theoretical_plot, y_for_theoretical_plot, label='theoretical line'
 fit.scatter_plot_data_and_fit(ax)
 fit.plot_residuals(residuals_ax)
 
+ax.set_title(r'$\Delta g$ vs. $\Delta R$ for Sodin Gravimeter readings in Burton Tower')
+ax.set_ylabel(r'$\Delta g$ / m s$^{-2}$')
+ax.set_xlabel(r'$\Delta R$ / m')
+
+residuals_ax.set_title(r'Residuals for proportional fit to $\Delta g$ vs. $\Delta R$')
+residuals_ax.set_ylabel(r'residuals / m s$^{-2}$')
+residuals_ax.set_xlabel(r'$\Delta R$ / m')
 
 fig.savefig('plots/fit_plot.png')
 residuals_fig.savefig('plots/residuals_plot.png')
@@ -61,4 +70,4 @@ R_error = R_from_slope_error(slope, slope_error)
 print(R_best_guess, R_error)
 
 print('measured radius is ' + Output.print_with_uncertainty(R_best_guess, R_error))
-print(R_best_guess / known_radius)
+print(R_best_guess / known_radius, 'of the known value')

@@ -10,8 +10,8 @@ class DataLoader():
         floor_to_r_factor = 3.95
         mgal_to_g_factor = 1 / 980665
 
-        min_range = 0
-        max_range = -1
+        min_range = 2
+        max_range = -2
 
         directory = '%s.txt' % (filename)
         self.full_data = np.loadtxt(directory, delimiter=',', dtype=float)[min_range:max_range].T
@@ -21,7 +21,7 @@ class DataLoader():
         middle = self.full_data[2]
         right_edge = self.full_data[3]
         
-        errors = np.abs(right_edge - left_edge) /4
+        errors = np.abs(right_edge - left_edge) / 8
 
         delta_r_arr = []
         delta_g_arr = []
