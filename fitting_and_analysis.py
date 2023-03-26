@@ -58,12 +58,20 @@ class Output():
         ax.errorbar(x, y, yerr=yerr, xerr=xerr, linestyle='None', capsize=2, marker='.', **kwargs)
 
     def get_dp(self, num): # returns number of decimal places
+        num = abs(float(num))
         decimal = Decimal(str(num))
         if decimal.as_tuple().exponent >= 0:
             dp = -int(np.log10(float(num)))
         else:
             dp = -decimal.as_tuple().exponent
-        return dp
+        return int(dp)
+
+    def get_leading_dp(self, num): # returns dp of first sig fig
+        num = abs(float(num))
+        dp = -int(np.log10(float(num)))
+        if self.get_dp(num) > 0:
+            dp += 1
+        return int(dp)
 
     def to_sf(self, num, sf=3):
         # # result = '%.*g' % (sf, num)
@@ -78,11 +86,11 @@ class Output():
         # else:
         #     result = float(result)
         # return result
-        result = np.format_float_positional(num, precision=sf, fractional=False, trim='-', min_digits=sf)
         # if '.' in result:
         #     result = float(result)
         # else:
         #     result = int(result)
+        result = np.format_float_positional(num, precision=sf, fractional=False, trim='-', min_digits=sf)
         return result
 
     def print_with_uncertainty(self, num, uncertainty):
@@ -90,6 +98,10 @@ class Output():
         uncertainty_dp = self.get_dp(rounded_uncertainty)
         rounded_num = round(num, uncertainty_dp)
         rounded_num_dp = self.get_dp(rounded_num)
+        rounded_num_leading_dp = self.get_leading_dp(rounded_num)
+
+        num_significant = float(rounded_num) * 10 ** rounded_num_leading_dp
+        uncertainty_significant = Decimal(rounded_uncertainty) * 10 ** Decimal(rounded_num_leading_dp)
 
         if uncertainty_dp <= 0:
             rounded_num = int(rounded_num)
@@ -97,15 +109,28 @@ class Output():
         rounded_uncertainty = str(rounded_uncertainty)
         rounded_num = str(rounded_num)
 
+        num_significant = np.format_float_positional(float(num_significant), trim='-')
+        uncertainty_significant = np.format_float_positional(float(uncertainty_significant), trim='-')
+
         if uncertainty_dp > 0 and rounded_num_dp <= 0:
             rounded_num += '.'
             for i in range(uncertainty_dp - rounded_num_dp):
                 rounded_num += '0'
 
-        return '$' + rounded_num + ' \pm ' + rounded_uncertainty + '$'
+
+        string = '$' + rounded_num + ' \pm ' + rounded_uncertainty + '$' # old version
+        if rounded_num_leading_dp < -4 or rounded_num_leading_dp > 4:
+            string = r'$( %s \pm %s ) \times 10^{%s}$' %(num_significant, uncertainty_significant, -rounded_num_leading_dp)
+        else:
+            string = r'$( %s \pm %s )$' % (num_significant, uncertainty_significant)
+        return string
 
 
 # Output = Output()
+# num = 0.000031
+# print(num * 10 ** Output.get_leading_dp(num))
+
+
 # # num = 3453478.2981732
 # # uncert = 6.64
 # # decimal = Decimal(str(uncert))
@@ -117,3 +142,4 @@ class Output():
 # print(Output.to_sf(uncert, 1))
 # print(Output.get_dp(uncert))
 # print(Output.get_dp(Output.to_sf(uncert, 1)))
+

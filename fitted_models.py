@@ -74,9 +74,9 @@ class Proportional:
         else:
             self.units_for_parameters = units_for_parameters
 
-        self.parameter_info_list = [str(self.parameter_names[i]) + ' = (' + Output.print_with_uncertainty(self.popt[i],
+        self.parameter_info_list = [str(self.parameter_names[i]) + ' = ' + Output.print_with_uncertainty(self.popt[i],
                                                                                                           parameter_errors[
-                                                                                                              i]) + ') ' +
+                                                                                                              i]) + ' ' +
                                     self.units_for_parameters for i in range(self.number_of_parameters)] # removed index for parameter units so that it uses the whole string; otherwise, only takes first char of str
         self.parameter_info = '\n'.join(self.parameter_info_list)
 
