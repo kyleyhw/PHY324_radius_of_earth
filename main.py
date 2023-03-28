@@ -21,7 +21,7 @@ model = fit_models.Proportional()
 
 units_for_parameters = (r's$^{-2}$')
 
-fit = fitting.Fitting(model, data.x, data.y, data.y_error, units_for_parameters=units_for_parameters)
+fit = fitting.Fitting(model, x=data.x, y_measured=data.y, x_error=data.x_error, y_error=data.y_error, units_for_parameters=units_for_parameters)
 
 
 fig, ax = plt.subplots(1, 1, figsize=(16,9))
