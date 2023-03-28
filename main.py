@@ -35,17 +35,20 @@ ax.plot(x_for_theoretical_plot, y_for_theoretical_plot, label='theoretical line'
 fit.scatter_plot_data_and_fit(ax)
 fit.plot_residuals(residuals_ax)
 
-ax.set_title(r'$\Delta g$ vs. $\Delta R$ for Sodin Gravimeter readings in Burton Tower')
+ax.set_title(r'$\Delta g$ vs. $\Delta r$ for Sodin Gravimeter readings in Burton Tower')
 ax.set_ylabel(r'$\Delta g$ / m s$^{-2}$')
-ax.set_xlabel(r'$\Delta R$ / m')
+ax.set_xlabel(r'$\Delta r$ / m')
 
-residuals_ax.set_title(r'Residuals for proportional fit to $\Delta g$ vs. $\Delta R$')
+residuals_ax.set_title(r'Residuals for proportional fit to $\Delta g$ vs. $\Delta r$')
 residuals_ax.set_ylabel(r'residuals / m s$^{-2}$')
-residuals_ax.set_xlabel(r'$\Delta R$ / m')
+residuals_ax.set_xlabel(r'$\Delta r$ / m')
 
-fig.savefig('plots/fit_plot.png')
-residuals_fig.savefig('plots/residuals_plot.png')
-
+if data.all_floors:
+        fig.savefig('plots/fit_plot_all_floors.png')
+        residuals_fig.savefig('plots/residuals_plot_all_floors.png')
+else:
+        fig.savefig('plots/fit_plot.png')
+        residuals_fig.savefig('plots/residuals_plot.png')
 
 
 # fig.show()

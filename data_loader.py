@@ -6,12 +6,17 @@ cff = CurveFitFuncs()
 
 class DataLoader():
     def __init__(self, filename):
+        self.all_floors = False
 
         floor_to_r_factor = 3.95
         mgal_to_g_factor = 1 / 980665
 
         min_range = 2
         max_range = -2
+
+        if self.all_floors:
+            min_range = 0
+            max_range = -1
 
         directory = '%s.txt' % (filename)
         self.full_data = np.loadtxt(directory, delimiter=',', dtype=float)[min_range:max_range].T
